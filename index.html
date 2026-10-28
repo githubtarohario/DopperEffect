@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ドップラー効果シミュレーション</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>ドップラー効果シミュレーション</h1>
+  </header>
+
+  <main>
+    <section class="patterns" id="patterns">
+      <button data-pattern="1" class="active">① 音源:静止 / 観測者:静止</button>
+      <button data-pattern="2">② 音源:移動 / 観測者:静止</button>
+      <button data-pattern="3">③ 音源:静止 / 観測者:移動</button>
+      <button data-pattern="4">④ 音源:移動 / 観測者:移動</button>
+    </section>
+
+    <section class="arrangement" id="arrangement">
+      <span>配置:</span>
+      <label><input type="radio" name="arrange" value="offset" checked> すれ違い（横にずれて通過）</label>
+      <label><input type="radio" name="arrange" value="inline"> 一直線上（正面から通過）</label>
+    </section>
+
+    <section class="arrangement" id="direction">
+      <span>向き（④のみ）:</span>
+      <label><input type="radio" name="dir" value="opposite" checked> 向かい合って進む</label>
+      <label><input type="radio" name="dir" value="srcBehind"> 同じ向き（音源が後ろから追う）</label>
+      <label><input type="radio" name="dir" value="obsBehind"> 同じ向き（観測者が後ろから追う）</label>
+    </section>
+
+    <div class="layout">
+      <div class="stage">
+        <canvas id="sim" width="960" height="480"></canvas>
+        <canvas id="graph" width="960" height="180"></canvas>
+      </div>
+
+      <aside class="panel">
+        <h2>観測結果</h2>
+        <dl class="readout">
+          <dt>音源の振動数 f</dt><dd><span id="outF">440</span> Hz</dd>
+          <dt>観測される振動数 f'（理論値）</dt><dd class="big"><span id="outTheo">—</span> Hz</dd>
+          <dt>観測される振動数 f'（波面の到達間隔から測定）</dt><dd><span id="outMeas">—</span> Hz</dd>
+          <dt>状態</dt><dd id="outState">—</dd>
+        </dl>
+        <div class="formula" id="formula"></div>
+
+        <h2>設定</h2>
+        <label>音源の振動数 f: <b><span id="valF">440</span> Hz</b>
+          <input type="range" id="inF" min="200" max="1000" step="10" value="440">
+        </label>
+        <label>音源の速さ v<sub>s</sub>: <b><span id="valVs">120</span> m/s</b>
+          <input type="range" id="inVs" min="0" max="300" step="5" value="120">
+        </label>
+        <label>観測者の速さ v<sub>o</sub>: <b><span id="valVo">80</span> m/s</b>
+          <input type="range" id="inVo" min="0" max="300" step="5" value="80">
+        </label>
+        <label>すれ違いの距離（縦のずれ）: <b><span id="valOff">60</span> px</b>
+          <input type="range" id="inOff" min="0" max="180" step="5" value="60">
+        </label>
+        <label>再生速度: <b>×<span id="valSpeed">1.0</span></b>
+          <input type="range" id="inSpeed" min="0.25" max="2" step="0.25" value="1">
+        </label>
+
+        <div class="buttons">
+          <button id="btnPlay">一時停止</button>
+          <button id="btnReset">リセット</button>
+          <button id="btnSound">🔈 音を鳴らす</button>
+        </div>
+        <p class="note">音速 V = 340 m/s。画面上の波面は見やすさのため実際の振動数より間引いて描いています（速さの比は実際と同じ）。</p>
+      </aside>
+    </div>
+  </main>
+
+  <script src="doppler.js"></script>
+</body>
+</html>
